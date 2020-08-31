@@ -6,6 +6,7 @@ import static org.springframework.web.servlet.function.RequestPredicates.POST;
 import static org.springframework.web.servlet.function.RequestPredicates.PUT;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 
+import com.suaki.functionalspring.handlers.EpecHandler;
 import com.suaki.functionalspring.handlers.InvoiceHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,11 +18,14 @@ import org.springframework.web.servlet.function.ServerResponse;
 @RequiredArgsConstructor
 public class Router {
 
+  private final EpecHandler epecHandler;
   private final InvoiceHandler invoiceHandler;
 
   @Bean
   public RouterFunction<ServerResponse> applicationRouter() {
-    return pingRouter().and(invoicesRouter());
+    return pingRouter()
+        .and(invoicesRouter())
+        .and(epecRouter());
   }
 
   public RouterFunction<ServerResponse> pingRouter() {
@@ -34,5 +38,9 @@ public class Router {
         .andRoute(GET("/invoices/{id}"), invoiceHandler::get)
         .andRoute(PUT("/invoices/{id}"), invoiceHandler::update)
         .andRoute(DELETE("/invoices/{id}"), invoiceHandler::delete);
+  }
+
+  public RouterFunction<ServerResponse> epecRouter() {
+    return route(POST("/epecs"), epecHandler::authorize);
   }
 }

@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.suaki'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '1.8'
 
 configurations {
 	compileOnly {
@@ -23,8 +23,12 @@ repositories {
 dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
+	implementation "br.com.swconsultoria:java-nfe:4.00.13"
+
 	implementation "io.vavr:vavr:0.10.3"
 	implementation "io.vavr:vavr-jackson:0.10.3"
+
+	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.0"
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'

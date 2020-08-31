@@ -27,16 +27,13 @@ public class ItemEntity {
   public static ItemEntity create(final String invoiceId, final Item item) {
     return ItemEntity.builder()
         .id(UUID.randomUUID().toString())
-        .itemId(item.getId())
+        .itemId(item.id())
         .invoiceId(invoiceId)
-        .name(item.getName())
+        .name(item.name())
         .build();
   }
 
   public Item toDomain() {
-    return Item.builder()
-        .id(getItemId())
-        .name(getName())
-        .build();
+    return new Item(getItemId(), getName());
   }
 }

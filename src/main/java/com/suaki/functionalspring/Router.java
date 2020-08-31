@@ -24,7 +24,7 @@ public class Router {
     return pingRouter().and(invoicesRouter());
   }
 
-  public RouterFunction<ServerResponse> pingRouter() {
+  private RouterFunction<ServerResponse> pingRouter() {
     return route(GET("/ping"), req -> ServerResponse.ok().body("pong"));
   }
 

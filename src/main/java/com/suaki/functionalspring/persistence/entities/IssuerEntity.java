@@ -23,15 +23,12 @@ public class IssuerEntity {
 
   public static IssuerEntity valueOf(final Issuer issuer) {
     return IssuerEntity.builder()
-        .cnpj(issuer.getCnpj())
-        .corporateName(issuer.getCorporateName())
+        .cnpj(issuer.cnpj())
+        .corporateName(issuer.corporateName())
         .build();
   }
 
   public Issuer toDomain() {
-    return Issuer.builder()
-        .cnpj(getCnpj())
-        .corporateName(getCorporateName())
-        .build();
+    return new Issuer(getCnpj(), getCorporateName());
   }
 }

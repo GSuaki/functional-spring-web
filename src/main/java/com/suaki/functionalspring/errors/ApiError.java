@@ -1,15 +1,14 @@
 package com.suaki.functionalspring.errors;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.vavr.Function1;
 
-@Value
-@AllArgsConstructor
-public class ApiError {
+public record ApiError(@JsonProperty("message") String message) {
 
-  String message;
+  public static final Function1<Throwable, ApiError> fromThrowable = ApiError::new;
+  public static final Function1<String, ApiError> fromString = ApiError::new;
 
   public ApiError(final Throwable t) {
-    this.message = t.getMessage();
+    this(t.getMessage());
   }
 }

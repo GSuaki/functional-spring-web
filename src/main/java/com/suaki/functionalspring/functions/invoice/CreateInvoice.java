@@ -1,7 +1,6 @@
 package com.suaki.functionalspring.functions.invoice;
 
 import com.suaki.functionalspring.domain.Invoice;
-import com.suaki.functionalspring.domain.Invoice.InvoiceBuilder;
 import com.suaki.functionalspring.domain.Issuer;
 import com.suaki.functionalspring.domain.Item;
 import com.suaki.functionalspring.domain.Recipient;
@@ -28,30 +27,27 @@ public class CreateInvoice implements Function1<Invoice, Try<Invoice>> {
   @Override
   public Try<Invoice> apply(final Invoice body) {
     return createInvoice(body)
-        .flatMap(createIssuer(body.getIssuer()))
-        .flatMap(createItems(body.getItems()))
-        .flatMap(createRecipient(body.getRecipient()));
+        .flatMap(createIssuer(body.issuer()))
+        .flatMap(createItems(body.items()))
+        .flatMap(createRecipient(body.recipient()));
   }
 
   private Function1<Invoice, Try<Invoice>> createIssuer(final Issuer body) {
     return invoice -> createIssuer.apply(body)
-        .map(invoice.toBuilder()::issuer)
-        .map(InvoiceBuilder::build);
+        .map(invoice::issuer);
   }
 
   private Function1<Invoice, Try<Invoice>> createItems(final List<Item> body) {
-    return invoice -> Try.of(() -> createItems.apply(invoice.getId(), body))
-        .map(invoice.toBuilder()::items)
-        .map(InvoiceBuilder::build);
+    return invoice -> Try.of(() -> createItems.apply(invoice.id(), body))
+        .map(invoice::items);
   }
 
   private Function1<Invoice, Try<Invoice>> createRecipient(final Recipient body) {
     return invoice -> createRecipient.apply(body)
-        .map(invoice.toBuilder()::recipient)
-        .map(InvoiceBuilder::build);
+        .map(invoice::recipient);
   }
 
-  private Try<Invoice> createInvoice(Invoice invoice) {
+  private Try<Invoice> createInvoice(final Invoice invoice) {
     return Try.of(() -> InvoiceEntity.create(invoice))
         .map(this.invoiceRepository::save)
         .map(InvoiceEntity::toDomain);

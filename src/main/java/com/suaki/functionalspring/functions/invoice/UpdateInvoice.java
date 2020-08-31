@@ -3,7 +3,6 @@ package com.suaki.functionalspring.functions.invoice;
 import com.suaki.functionalspring.domain.Invoice;
 import com.suaki.functionalspring.persistence.entities.InvoiceEntity;
 import com.suaki.functionalspring.persistence.repositories.InvoiceRepository;
-import io.vavr.Function1;
 import io.vavr.Function2;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +10,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UpdateInvoice implements Function1<Invoice, Try<Invoice>> {
+public class UpdateInvoice implements Function2<String, Invoice, Try<Invoice>> {
 
   private final InvoiceRepository invoiceRepository;
 
   @Override
-  public Try<Invoice> apply(final Invoice payload) {
-    return this.invoiceRepository.findById(payload.getId())
+  public Try<Invoice> apply(final String id, final Invoice payload) {
+    return this.invoiceRepository.findById(id)
         .toTry(() -> new RuntimeException("Not found"))
         .flatMap(Function2.of(this::updateInvoice).apply(payload));
   }

@@ -1,23 +1,13 @@
 package com.suaki.functionalspring.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Value;
 
-@Builder
-@Value
-public class Issuer {
+public record Issuer(
+    @JsonProperty("cnpj")String cnpj,
+    @JsonProperty("corporate_name")String corporateName
+) {
 
-  String cnpj;
-  String corporateName;
-
-  @JsonCreator
-  public Issuer(
-      @JsonProperty("cnpj") final String cnpj,
-      @JsonProperty("corporate_name") final String corporateName
-  ) {
-    this.cnpj = cnpj;
-    this.corporateName = corporateName;
+  public static Issuer cnpj(final String cnpj) {
+    return new Issuer(cnpj, "");
   }
 }

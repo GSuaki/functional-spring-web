@@ -1,6 +1,5 @@
 package com.suaki.functionalspring.persistence.entities;
 
-import com.suaki.functionalspring.domain.Issuer;
 import com.suaki.functionalspring.domain.Recipient;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,15 +23,12 @@ public class RecipientEntity {
 
   public static RecipientEntity valueOf(final Recipient recipient) {
     return RecipientEntity.builder()
-        .cpf(recipient.getCpf())
-        .name(recipient.getName())
+        .cpf(recipient.cpf())
+        .name(recipient.name())
         .build();
   }
 
   public Recipient toDomain() {
-    return Recipient.builder()
-        .cpf(getCpf())
-        .name(getName())
-        .build();
+    return new Recipient(getCpf(), getName());
   }
 }

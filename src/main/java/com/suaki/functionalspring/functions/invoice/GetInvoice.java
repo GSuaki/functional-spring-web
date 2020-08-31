@@ -1,7 +1,6 @@
 package com.suaki.functionalspring.functions.invoice;
 
 import com.suaki.functionalspring.domain.Invoice;
-import com.suaki.functionalspring.domain.Invoice.InvoiceBuilder;
 import com.suaki.functionalspring.functions.issuer.GetIssuer;
 import com.suaki.functionalspring.functions.item.GetItemsByInvoiceId;
 import com.suaki.functionalspring.functions.recipient.GetRecipient;
@@ -31,22 +30,18 @@ public class GetInvoice implements Function1<String, Either<String, Invoice>> {
 
   private Either<String, Invoice> assembleIssuer(final Invoice invoice) {
     return getIssuer.apply(invoice.getIssuerCnpj())
-        .map(invoice.toBuilder()::issuer)
-        .map(InvoiceBuilder::build)
+        .map(invoice::issuer)
         .toEither(() -> "Issuer not found");
   }
 
   private Either<String, Invoice> assembleRecipient(final Invoice invoice) {
     return getRecipient.apply(invoice.getRecipientCpf())
-        .map(invoice.toBuilder()::recipient)
-        .map(InvoiceBuilder::build)
+        .map(invoice::recipient)
         .toEither(() -> "Recipient not found");
   }
 
   private Invoice assembleItems(final Invoice invoice) {
-    return invoice.toBuilder()
-        .items(getItemsByInvoiceId.apply(invoice.getId()))
-        .build();
+    return invoice.items(getItemsByInvoiceId.apply(invoice.id()));
   }
 
   private Either<String, Invoice> getInvoice(String id) {
